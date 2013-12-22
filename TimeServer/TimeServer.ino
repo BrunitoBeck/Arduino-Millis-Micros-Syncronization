@@ -34,9 +34,6 @@ void requestEvent()
   else if(timeLength == 5){
     timeValue = "00000" + timeValue;
   }
-  else if(timeLength == 5){
-    timeValue = "00000" + timeValue;
-  }
   else if(timeLength == 6){
     timeValue = "0000" + timeValue;
   }
