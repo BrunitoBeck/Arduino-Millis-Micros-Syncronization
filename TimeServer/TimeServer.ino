@@ -1,7 +1,8 @@
 #include <Wire.h>
-
+String timeValue;
 void setup()
 {
+  timeValue.reserve(10);
   Wire.begin(0x50); // Setup I2C slave address as 0x50     
   Wire.onRequest(requestEvent); // Register event
 }
@@ -12,5 +13,37 @@ void loop() {
 
 void requestEvent()
 {
-  Wire.write(micros());
+  timeValue = String(micros());
+  volatile int timeLength = timeValue.length();
+  if(timeLength == 1){
+    timeValue = "000000000" + timeValue;
+  }
+  else if(timeLength == 2){
+    timeValue = "00000000" + timeValue;
+  }
+  else if(timeLength == 3){
+    timeValue = "0000000" + timeValue;
+  }
+  else if(timeLength == 4){
+    timeValue = "000000" + timeValue;
+  }
+  else if(timeLength == 5){
+    timeValue = "00000" + timeValue;
+  }
+  else if(timeLength == 5){
+    timeValue = "00000" + timeValue;
+  }
+  else if(timeLength == 6){
+    timeValue = "0000" + timeValue;
+  }
+  else if(timeLength == 7){
+    timeValue = "000" + timeValue;
+  }
+  else if(timeLength == 8){
+    timeValue = "00" + timeValue;
+  }
+  else if(timeLength == 9){
+    timeValue = "0" + timeValue;
+  }
+  Wire.print(timeValue);
 }
