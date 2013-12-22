@@ -1,3 +1,5 @@
+#include <Wire.h>
+
 void setup()
 {
   Wire.begin(0x50); // Setup I2C slave address as 0x50     
