@@ -5,6 +5,7 @@ unsigned long timeFromTimeServer;
 
 void setup() {
   Serial.begin(9600);
+  Serial.println("SYNCING...");
   syncTime(); // Sync time with TimeServer
 }
 
@@ -23,5 +24,6 @@ void syncTime(){
     
   }
   timeFromTimeServer = atol(dataFromTimeServer);
+  Serial.println(dataFromTimeServer);
   Serial.println(timeFromTimeServer);
 } 
