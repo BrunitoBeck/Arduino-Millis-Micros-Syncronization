@@ -5,8 +5,6 @@ char dataFromClient[10];  // Variable to hold data from client
 
 volatile unsigned long clientTime;  // Variable to hold timestamp of client
 
-const int syncStatusPin = 11;  // Pin that sync server status is output on
-
 void setup()
 {
   timeOffsetStr.reserve(10); // Reserve 10 bytes for unsigned long time
