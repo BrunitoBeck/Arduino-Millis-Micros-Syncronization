@@ -26,7 +26,7 @@ void loop() {
    currentSyncedTime=0;
  }
  // Sync every 5 seconds if Time server is avail
- if((millis() - timeOfLastSync) > 5000 && digitalRead(11) == LOW){ 
+ if((millis() - timeOfLastSync) > 5000 && digitalRead(11) != LOW){ 
    syncTime();
  }
 
