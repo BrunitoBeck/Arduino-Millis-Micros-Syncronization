@@ -13,8 +13,6 @@ void setup()
   Wire.begin(0x50); // Setup I2C slave address as 0x50     
   Wire.onRequest(requestEvent); // Register event for requested data
   Wire.onReceive(receiveEvent); // Register event for incomming data
-  pinMode(syncStatusPin, OUTPUT);  // setup pin 11 as output
-  digitalWrite(syncStatusPin, HIGH);  // set it to high
 }
 
 void loop() {
@@ -22,7 +20,6 @@ void loop() {
 }
 
 void receiveEvent(int bytes){
-  digitalWrite(syncStatusPin, LOW); // let other arduinos know that we're busy
   int index = 0;  // index of char array
   while(Wire.available())   // while more bytes avail
   { 
@@ -68,5 +65,4 @@ void requestEvent()
   }
   Wire.print(timeOffsetStr); // respond with padded timestamp
   
-  digitalWrite(syncStatusPin, HIGH); // let other arduinos know that we're clear
 }

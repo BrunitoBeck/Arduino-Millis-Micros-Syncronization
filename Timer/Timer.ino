@@ -3,11 +3,12 @@
 char dataFromTimeServer[10]; // char array to hold I2C data from TimeServer
 unsigned long timeOffset = 0;  // unsigned long to hold time from TimeServer
 
-unsigned long currentSyncedTime = 0;
-unsigned long timeOfLastSync = 0;
+unsigned long currentSyncedTime = 0;  // Last button press's time (synced)
+unsigned long timeOfLastSync = 0;   // Timestap of last sync
 
-const int buttonPin = 10;
-const int syncStatusPin = 11;
+const int buttonPin = 10; // Pin that button is on
+const int syncStatusOutPin = 11; // Pin that sync status is output on
+const int syncStatusInPin = 22; // Pin that sync status is collected on
 
 void setup() {
   
@@ -18,8 +19,12 @@ void setup() {
   digitalWrite(buttonPin,HIGH);  // enable pull up resitor
   attachInterrupt(buttonPin, buttonPress, FALLING);  // register interrup on FALLING state
   
-  digitalWrite(syncStatusPin,HIGH);  // enable pull up resitor
-  pinMode(syncStatusPin, INPUT);  // set it up as an input
+  
+  pinMode(syncStatusOutPin, OUTPUT);  // set it up as an output
+  digitalWrite(syncStatusOutPin,LOW); // default state
+  
+  digitalWrite(syncStatusInPin, LOW);  // setup pull-down
+  pinMode(syncStatusInPin, INPUT);  // set it up as an input
 }
 
 
@@ -29,7 +34,7 @@ void loop() {
    currentSyncedTime=0;
  }
  // Sync every 5 seconds if Time server is avail
- if((millis() - timeOfLastSync) > 5000 && digitalRead(11) != LOW){ 
+ if((millis() - timeOfLastSync) > 5000 && digitalRead(syncStatusInPin) == LOW){ 
    syncTime();
  }
 
@@ -42,6 +47,10 @@ void buttonPress(){
 
 // Method to read timestamp from central TimeServer over I2C
 void syncTime(){
+  
+  while(digitalRead(syncStatusInPin) != LOW) { } // wait for server to become free
+  
+  digitalWrite(syncStatusOutPin,HIGH);   // let others know server is busy
     //Serial.print("SYNCING...");
   Wire.begin();  // Initialize I2c  
   
@@ -90,6 +99,8 @@ void syncTime(){
     dataFromTimeServer[index++] = c;  // store byte in char array
     
   }
+  digitalWrite(syncStatusOutPin,LOW); // let others know server is free
   timeOffset = atol(dataFromTimeServer);  // convert char array to unsigned long
   timeOfLastSync = millis();  // update time of last sync
+  
 }  
