@@ -7,6 +7,8 @@ void setup()
   timeValue.reserve(10); // Reserve 10 bytes for unsigned long time
   Wire.begin(0x50); // Setup I2C slave address as 0x50     
   Wire.onRequest(requestEvent); // Register event
+  pinMode(11, OUTPUT);  // setup pin 11 as output
+  digitalWrite(11, HIGH);  // set it to high
 }
 
 void loop() {
@@ -15,6 +17,8 @@ void loop() {
 
 void requestEvent()
 {
+  digitalWrite(11, LOW); // let other arduinos know that we're busy
+  
   timeValue = String(micros());  // convert timestamp to string
   volatile int timeLength = timeValue.length();  // find out how many digits are in the current time
   // If not 10 digits (max digit length for unsigned long), add leading zeros
@@ -47,4 +51,6 @@ void requestEvent()
     timeValue = "0" + timeValue;
   }
   Wire.print(timeValue); // respond with padded timestamp
+  
+  digitalWrite(11, HIGH); // let other arduinos know that we're clear
 }
