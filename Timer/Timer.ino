@@ -14,8 +14,6 @@ void setup() {
   
   Serial.begin(9600);
   
-  syncTime(); // Sync time with TimeServer
-  
   digitalWrite(buttonPin,HIGH);  // enable pull up resitor
   attachInterrupt(buttonPin, buttonPress, FALLING);  // register interrup on FALLING state
   
@@ -25,6 +23,8 @@ void setup() {
   
   digitalWrite(syncStatusInPin, LOW);  // setup pull-down
   pinMode(syncStatusInPin, INPUT);  // set it up as an input
+  
+  syncTime(); // Sync time with TimeServer
 }
 
 
