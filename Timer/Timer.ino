@@ -1,4 +1,4 @@
-#include <Wire.h>
+#include <Wire.h> //perfect!!
 
 char dataFromTimeServer[10]; // char array to hold I2C data from TimeServer
 unsigned long timeOffset = 0;  // unsigned long to hold time from TimeServer
